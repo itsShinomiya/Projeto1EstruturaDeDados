@@ -145,8 +145,6 @@ void adicionar_projeto() {
     printf("Digite o nome do projeto: ");
     scanf(" %[^\n]s", p.nome);
     printf("Digite a data de início (dd-mm-aaaa): ");
-    struct tm inicio_tm = {0};
-    printf("Digite a data de início (dd-mm-aaaa): ");
     scanf(" %[^\n]s", p.data_inicio);
     printf("Digite a data de término (dd-mm-aaaa): ");
     scanf(" %19s", datas);
@@ -214,13 +212,14 @@ void alterar_projeto() {
             printf("Digite a nova data de término (ou pressione Enter para manter): ");
             char nova_data_termino[20];
             fgets(nova_data_termino, sizeof(nova_data_termino), stdin);
-            nova_data_termino[strcspn(nova_data_termino, "\n")] = 0; // Remove o caractere de nova linha
+            nova_data_termino[strcspn(nova_data_termino, "\n")] = 0;
 
             if (strlen(nova_data_termino) > 0) {
                 struct tm termino_tm = {0};
                 sscanf(nova_data_termino, "%d-%d-%d", &termino_tm.tm_mday, &termino_tm.tm_mon, &termino_tm.tm_year);
-                termino_tm.tm_mon -= 1; // Ajusta o mês
-                termino_tm.tm_year -= 1900; // Ajusta o ano
+                // aqui ta arrumando o calculo de ano e mês, parece que a função funciona assim
+                termino_tm.tm_mon -= 1;
+                termino_tm.tm_year -= 1900;
                 projetos[i].data_termino = mktime(&termino_tm);
             }
 
@@ -331,7 +330,7 @@ void listar_funcionarios_responsaveis() {
     }
 }
 
-// Adicionar/Buscar e-mail de gerente
+// Adicionar/Buscar e-mail de responsável
 void adicionar_email() {
     int numero_funcional_responsavel;
     char email[100];
