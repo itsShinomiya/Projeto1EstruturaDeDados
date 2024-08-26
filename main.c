@@ -18,11 +18,12 @@ typedef struct {
 // Estrutura pra projeto
 typedef struct {
     char nome[100];
-    time_t data_inicio;
+    char data_inicio[11];
     time_t data_termino;
     int tempo_estimado_projeto;
     float valor_estimado;
     int numero_funcional_responsavel;
+    int p_finalizado;
 } Projeto;
 
 Funcionario funcionarios[MAX_FUNCIONARIOS];
@@ -145,11 +146,8 @@ void adicionar_projeto() {
     scanf(" %[^\n]s", p.nome);
     printf("Digite a data de início (dd-mm-aaaa): ");
     struct tm inicio_tm = {0};
-    scanf(" %19s", datas);
-    sscanf(datas, "%d-%d-%d", &inicio_tm.tm_mday, &inicio_tm.tm_mon, &inicio_tm.tm_year);
-    inicio_tm.tm_mon = inicio_tm.tm_mon - 1;
-    inicio_tm.tm_year = inicio_tm.tm_year - 1900;
-    p.data_inicio = mktime(&inicio_tm);
+    printf("Digite a data de início (dd-mm-aaaa): ");
+    scanf(" %[^\n]s", p.data_inicio);
     printf("Digite a data de término (dd-mm-aaaa): ");
     scanf(" %19s", datas);
     struct tm termino_tm = {0};
@@ -163,6 +161,8 @@ void adicionar_projeto() {
     scanf("%f", &p.valor_estimado);
     printf("Digite o número funcional do responsável: ");
     scanf("%d", &p.numero_funcional_responsavel);
+    printf("O projeto está finalizado? (Digite 1 para sim, e 0 para não)");
+    scanf("%d", &p.p_finalizado);
 
     for (int i = 0; i < num_projetos; i++) {
         if (strcmp(projetos[i].nome, p.nome) == 0) {
@@ -205,16 +205,10 @@ void alterar_projeto() {
     for (int i = 0; i < num_projetos; i++) {
         if (strcmp(projetos[i].nome, nome) == 0) {
             printf("Digite a nova data de início (ou pressione Enter para manter): ");
-            char nova_data_inicio[20];
-            fgets(nova_data_inicio, sizeof(nova_data_inicio), stdin);
-            nova_data_inicio[strcspn(nova_data_inicio, "\n")] = 0; // Remove o caractere de nova linha
-
+            char nova_data_inicio[11];
+            scanf(" %[^\n]s", nova_data_inicio);
             if (strlen(nova_data_inicio) > 0) {
-                struct tm inicio_tm = {0};
-                sscanf(nova_data_inicio, "%d-%d-%d", &inicio_tm.tm_mday, &inicio_tm.tm_mon, &inicio_tm.tm_year);
-                inicio_tm.tm_mon -= 1; // Ajusta o mês
-                inicio_tm.tm_year -= 1900; // Ajusta o ano
-                projetos[i].data_inicio = mktime(&inicio_tm);
+                strcpy(projetos[i].data_inicio, nova_data_inicio);
             }
 
             printf("Digite a nova data de término (ou pressione Enter para manter): ");
