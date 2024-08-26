@@ -159,7 +159,7 @@ void adicionar_projeto() {
     scanf("%f", &p.valor_estimado);
     printf("Digite o número funcional do responsável: ");
     scanf("%d", &p.numero_funcional_responsavel);
-    printf("O projeto está finalizado? (Digite 1 para sim, e 0 para não)");
+    printf("O projeto está finalizado? (Digite 1 para sim, e 0 para não) ");
     scanf("%d", &p.p_finalizado);
 
     for (int i = 0; i < num_projetos; i++) {
