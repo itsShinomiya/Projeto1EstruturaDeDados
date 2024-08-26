@@ -159,7 +159,7 @@ void adicionar_projeto() {
     scanf("%f", &p.valor_estimado);
     printf("Digite o número funcional do responsável: ");
     scanf("%d", &p.numero_funcional_responsavel);
-    printf("O projeto está finalizado? (Digite 1 para sim, e 0 para não) ");
+    printf("O projeto está finalizado? (Digite 1 para sim, e 0 para não): ");
     scanf("%d", &p.p_finalizado);
 
     for (int i = 0; i < num_projetos; i++) {
@@ -292,27 +292,35 @@ void listar_projetos_atrasados() {
     struct tm *tm_sistema = localtime(&tempo_sistema);
 
     printf("Projetos atrasados:\n");
+    int atraso = 0;
     for (int i = 0; i < num_projetos; i++) {
-        if (difftime(tempo_sistema, projetos[i].data_termino) > 0) {
-            struct tm *tm_data_termino = localtime(&projetos[i].data_termino);
+        if (projetos[i].p_finalizado != 1) {
+            if (difftime(tempo_sistema, projetos[i].data_termino) > 0) {
+                struct tm *tm_data_termino = localtime(&projetos[i].data_termino);
 
-            int anos_atraso = tm_sistema->tm_year - tm_data_termino->tm_year;
-            int meses_atraso = tm_sistema->tm_mon - tm_data_termino->tm_mon;
-            int dias_atraso = tm_sistema->tm_mday - tm_data_termino->tm_mday;
+                int anos_atraso = tm_sistema->tm_year - tm_data_termino->tm_year;
+                int meses_atraso = tm_sistema->tm_mon - tm_data_termino->tm_mon;
+                int dias_atraso = tm_sistema->tm_mday - tm_data_termino->tm_mday;
 
-            if (dias_atraso < 0) {
-                meses_atraso--;
-                int dias_no_mes_anterior = 30;
-                dias_atraso += dias_no_mes_anterior;
+                if (dias_atraso < 0) {
+                    meses_atraso--;
+                    int dias_no_mes_anterior = 30;
+                    dias_atraso += dias_no_mes_anterior;
+                }
+
+                if (meses_atraso < 0) {
+                    anos_atraso--;
+                    meses_atraso += 12;
+                }
+
+                printf("%s: %d anos, %d meses e %d dias de atraso\n", projetos[i].nome, anos_atraso, meses_atraso, dias_atraso);
+                atraso = atraso + 1;
             }
-
-            if (meses_atraso < 0) {
-                anos_atraso--;
-                meses_atraso += 12;
-            }
-
-            printf("%s: %d anos, %d meses e %d dias de atraso\n", projetos[i].nome, anos_atraso, meses_atraso, dias_atraso);
         }
+    }
+
+    if (atraso == 0) {
+        printf("Não há projetos em atraso!\n");
     }
 }
 
