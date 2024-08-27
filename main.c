@@ -296,6 +296,8 @@ void listar_projetos_atrasados() {
     for (int i = 0; i < num_projetos; i++) {
         if (projetos[i].p_finalizado != 1) {
             if (difftime(tempo_sistema, projetos[i].data_termino) > 0) {
+                double puta = difftime(tempo_sistema, projetos[i].data_termino);
+                printf("%f", puta);
                 struct tm *tm_data_termino = localtime(&projetos[i].data_termino);
 
                 int anos_atraso = tm_sistema->tm_year - tm_data_termino->tm_year;
@@ -321,6 +323,10 @@ void listar_projetos_atrasados() {
 
     if (atraso == 0) {
         printf("Não há projetos em atraso!\n");
+    }
+
+    if (atraso > 0) {
+        printf("\nNúmero de projetos em atraso: %d", atraso);
     }
 }
 
