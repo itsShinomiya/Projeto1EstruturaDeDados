@@ -296,30 +296,24 @@ void listar_projetos_atrasados() {
     for (int i = 0; i < num_projetos; i++) {
         if (projetos[i].p_finalizado != 1) {
             if (difftime(tempo_sistema, projetos[i].data_termino) > 0) {
-                double puta = difftime(tempo_sistema, projetos[i].data_termino);
-                printf("%f", puta);
-                struct tm *tm_data_termino = localtime(&projetos[i].data_termino);
+                double dif_segundos = difftime(tempo_sistema, projetos[i].data_termino);
 
-                int anos_atraso = tm_sistema->tm_year - tm_data_termino->tm_year;
-                int meses_atraso = tm_sistema->tm_mon - tm_data_termino->tm_mon;
-                int dias_atraso = tm_sistema->tm_mday - tm_data_termino->tm_mday;
-
-                if (dias_atraso < 0) {
-                    meses_atraso--;
-                    int dias_no_mes_anterior = 30;
-                    dias_atraso += dias_no_mes_anterior;
-                }
-
-                if (meses_atraso < 0) {
-                    anos_atraso--;
-                    meses_atraso += 12;
-                }
+            if (dif_segundos > 0) {
+                int dias_atraso = dif_segundos / (60 * 60 * 24);
+                
+                int anos_atraso = dias_atraso / 365;
+                dias_atraso %= 365;
+                
+                int meses_atraso = dias_atraso / 30;
+                dias_atraso %= 30;
 
                 printf("%s: %d anos, %d meses e %d dias de atraso\n", projetos[i].nome, anos_atraso, meses_atraso, dias_atraso);
-                atraso = atraso + 1;
+
+                atraso++;
             }
         }
     }
+}
 
     if (atraso == 0) {
         printf("Não há projetos em atraso!\n");
