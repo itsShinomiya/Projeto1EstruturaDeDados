@@ -32,6 +32,10 @@ char emails[MAX_EMAILS][100];
 int num_funcionarios = 0;
 int num_projetos = 0;
 
+int hash(int numero_funcional) {
+    return numero_funcional % MAX_EMAILS;
+}
+
 // Ordenar funcionários por número funcional
 void ordenar_funcionarios() {
     for (int i = 0; i < num_funcionarios - 1; i++) {
@@ -217,7 +221,6 @@ void alterar_projeto() {
             if (strlen(nova_data_termino) > 0) {
                 struct tm termino_tm = {0};
                 sscanf(nova_data_termino, "%d-%d-%d", &termino_tm.tm_mday, &termino_tm.tm_mon, &termino_tm.tm_year);
-                // aqui ta arrumando o calculo de ano e mês, parece que a função funciona assim
                 termino_tm.tm_mon -= 1;
                 termino_tm.tm_year -= 1900;
                 projetos[i].data_termino = mktime(&termino_tm);
@@ -329,16 +332,32 @@ void listar_funcionarios_responsaveis() {
     printf("Funcionários responsáveis por projetos em andamento:\n");
     for (int i = 0; i < num_projetos; i++) {
         int numero_funcional = projetos[i].numero_funcional_responsavel;
+        
+        // Procurar o funcionário responsável
         for (int j = 0; j < num_funcionarios; j++) {
             if (funcionarios[j].numero_funcional == numero_funcional) {
-                printf("%s\n", funcionarios[j].nome);
+                printf("Nome: %s\n", funcionarios[j].nome);
+                
+                // Buscar e imprimir o e-mail do funcionário responsável
+                int index = hash(numero_funcional);
+                while (strlen(emails[index]) != 0) {
+                    // Verifica se o e-mail pertence ao número funcional correto
+                    int numero_funcional_armazenado;
+                    sscanf(emails[index], "%d:", &numero_funcional_armazenado);
+                    if (numero_funcional_armazenado == numero_funcional) {
+                        printf("E-mail: %s\n", emails[index] + strlen(emails[index]) - strlen(strchr(emails[index], ':') + 2));
+                        break;
+                    }
+                    index = (index + 1) % MAX_EMAILS;  // Tratar colisões
+                }
                 break;
             }
         }
     }
 }
 
-// Adicionar/Buscar e-mail de responsável
+
+// Adicionar e-mail de gerente de projeto
 void adicionar_email() {
     int numero_funcional_responsavel;
     char email[100];
@@ -347,14 +366,14 @@ void adicionar_email() {
     printf("Digite o e-mail: ");
     scanf(" %[^\n]s", email);
 
-    for (int i = 0; i < MAX_EMAILS; i++) {
-        if (strlen(emails[i]) == 0) {
-            sprintf(emails[i], "%d: %s", numero_funcional_responsavel, email);
-            printf("E-mail adicionado com sucesso.\n");
-            return;
-        }
+    int index = hash(numero_funcional_responsavel);
+
+    while (strlen(emails[index]) != 0) {
+        index = (index + 1) % MAX_EMAILS;
     }
-    printf("Número máximo de e-mails alcançado.\n");
+
+    sprintf(emails[index], "%d: %s", numero_funcional_responsavel, email);
+    printf("E-mail adicionado com sucesso%d.\n", index);
 }
 
 // Exibir o menu
