@@ -333,22 +333,19 @@ void listar_funcionarios_responsaveis() {
     for (int i = 0; i < num_projetos; i++) {
         int numero_funcional = projetos[i].numero_funcional_responsavel;
         
-        // Procurar o funcionário responsável
         for (int j = 0; j < num_funcionarios; j++) {
             if (funcionarios[j].numero_funcional == numero_funcional) {
                 printf("Nome: %s\n", funcionarios[j].nome);
                 
-                // Buscar e imprimir o e-mail do funcionário responsável
                 int index = hash(numero_funcional);
                 while (strlen(emails[index]) != 0) {
-                    // Verifica se o e-mail pertence ao número funcional correto
                     int numero_funcional_armazenado;
                     sscanf(emails[index], "%d:", &numero_funcional_armazenado);
                     if (numero_funcional_armazenado == numero_funcional) {
                         printf("E-mail: %s\n", emails[index] + strlen(emails[index]) - strlen(strchr(emails[index], ':') + 2));
                         break;
                     }
-                    index = (index + 1) % MAX_EMAILS;  // Tratar colisões
+                    index = (index + 1) % MAX_EMAILS; 
                 }
                 break;
             }
