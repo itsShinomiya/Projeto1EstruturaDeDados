@@ -1,3 +1,11 @@
+/*
+MEMBROS DO GRUPO
+Eduardo Mambelli Serotini - PC3031055
+Victor Gimenes Vianna - PC3031055
+Marcelo Jun Goto - PC3031934
+Gabriel Henrique Lima - PC3032779
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -280,12 +288,18 @@ void listar_funcionarios_salario_alto() {
 
 // Listar projetos em andamento com alto valor
 void listar_projetos_valor_alto() {
+    int andamento;
     printf("Projetos em andamento com valor acima de R$500.000,00:\n");
     for (int i = 0; i < num_projetos; i++) {
-        // aqui só simula que ta em andamento, precisa arrumar
-        if (projetos[i].valor_estimado > 500000) {
-            printf("%s: R$%.2f\n", projetos[i].nome, projetos[i].valor_estimado);
+        if (projetos[i].p_finalizado != 1) {
+            if (projetos[i].valor_estimado > 500000) {
+                printf("%s: R$%.2f\n", projetos[i].nome, projetos[i].valor_estimado);
+                andamento += 1;
+            }
         }
+    }
+    if (andamento == 0) {
+        printf("Não há projetos em andamento com valor superior a R$500.000,00");
     }
 }
 
