@@ -1,11 +1,3 @@
-/*
-MEMBROS DO GRUPO
-Eduardo Mambelli Serotini - PC3031055
-Victor Gimenes Vianna - PC3031055
-Marcelo Jun Goto - PC3031934
-Gabriel Henrique Lima - PC3032779
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
